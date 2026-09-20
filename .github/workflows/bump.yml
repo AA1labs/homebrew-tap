@@ -1,0 +1,46 @@
+name: Bump the cask
+
+# The cask points at whatever RayMate's releases repo calls latest. This keeps its version and
+# checksum in step without anyone editing the file by hand.
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read the newest release and update the cask
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASES_REPO: AA1labs/Raymate-releases
+        run: |
+          set -euo pipefail
+          TAG=$(gh release view --repo "$RELEASES_REPO" --json tagName --jq .tagName)
+          VERSION="${TAG#v}"
+          CURRENT=$(grep -oE 'version "[^"]+"' Casks/raymate.rb | head -1 | cut -d'"' -f2)
+          if [ "$VERSION" = "$CURRENT" ]; then
+            echo "already on $VERSION"
+            exit 0
+          fi
+
+          DMG="RayMate_${VERSION}_aarch64.dmg"
+          URL="https://github.com/$RELEASES_REPO/releases/download/$TAG/$DMG"
+          # A release without the expected asset must not produce a cask nobody can install.
+          curl -fsSL -o "$DMG" "$URL"
+          SHA=$(shasum -a 256 "$DMG" | cut -d' ' -f1)
+          rm -f "$DMG"
+
+          sed -i -E "s/version \"[^\"]+\"/version \"$VERSION\"/" Casks/raymate.rb
+          sed -i -E "s/sha256 \"[^\"]+\"/sha256 \"$SHA\"/" Casks/raymate.rb
+
+          git config user.name "AA1 Labs"
+          git config user.email "noreply@aa1labs.com"
+          git commit -am "raymate $VERSION"
+          git push
