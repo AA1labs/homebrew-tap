@@ -1,8 +1,8 @@
 cask "raymate" do
-  version "0.1.3"
-  sha256 "fd67d318ba8f4a066063f7c388d3430e08770ee90766923b68d6ac56d2a497ff"
+  version "0.1.4"
+  sha256 "c61d7a03bd2fa5318ac4926e4c47f8a58b6f084ad06f948a51806178d3e42231"
 
-  url "https://github.com/AA1labs/Raymate-releases/releases/download/v#{version}/RayMate_#{version}_aarch64.dmg"
+  url "https://github.com/AA1labs/Raymate-releases/releases/download/v#{version}/RayMate_#{version}_universal.dmg"
   name "RayMate"
   desc "AI launcher with chat, quick prompts and on-device dictation"
   homepage "https://raymate.app/"
@@ -14,7 +14,6 @@ cask "raymate" do
 
   auto_updates true
   depends_on macos: :monterey
-  depends_on arch: :arm64
 
   app "RayMate.app"
 

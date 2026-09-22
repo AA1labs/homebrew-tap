@@ -30,7 +30,7 @@ jobs:
             exit 0
           fi
 
-          DMG="RayMate_${VERSION}_aarch64.dmg"
+          DMG="RayMate_${VERSION}_universal.dmg"
           URL="https://github.com/$RELEASES_REPO/releases/download/$TAG/$DMG"
           # A release without the expected asset must not produce a cask nobody can install.
           curl -fsSL -o "$DMG" "$URL"
