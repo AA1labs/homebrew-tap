@@ -1,6 +1,6 @@
 cask "raymate" do
-  version "0.1.4"
-  sha256 "c61d7a03bd2fa5318ac4926e4c47f8a58b6f084ad06f948a51806178d3e42231"
+  version "0.1.5"
+  sha256 "034d32c19681cf2c2db48ea0fed6776054a5f0332de7b7919173465cf5d0f1b9"
 
   url "https://github.com/AA1labs/Raymate-releases/releases/download/v#{version}/RayMate_#{version}_universal.dmg"
   name "RayMate"
